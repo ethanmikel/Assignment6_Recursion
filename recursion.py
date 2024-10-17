@@ -134,21 +134,15 @@ def split_odd_10(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
-    start = 0
-    odd_sum = 0
-    ten_sum = 0
-
     def recursive_split(start, odd_sum, ten_sum):
         if start >= len(nums):
             return odd_sum % 2 != 0 and ten_sum % 10 == 0
-
-        current = nums[start]
-
-        return (recursive_split(start + 1, odd_sum + current, ten_sum) or
-                recursive_split(start + 1, odd_sum, ten_sum + current) or
+        
+        return (recursive_split(start + 1, odd_sum + nums[start], ten_sum) or
+                recursive_split(start + 1, odd_sum, ten_sum + nums[start]) or
                 recursive_split(start + 1, odd_sum, ten_sum))
 
-    return recursive_split(start, odd_sum, ten_sum)
+    return recursive_split(0, 0, 0)
 
 def split_53(nums):
     """

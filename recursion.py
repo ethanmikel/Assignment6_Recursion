@@ -62,11 +62,14 @@ def group_no_adj(start, nums, target):
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
     if start >= len(nums):
-        return False
+        return target == 0
 
     include_current = group_no_adj(start + 2, nums, target - nums[start])
-    exclude_current = group_no_adj(start + 1, nums, target)
-    return include_current or exclude_current
+
+    skip_current = group_no_adj(start + 1, nums, target)
+
+    return include_current or skip_current
+
 
 def group_sum_5(start, nums, target):
     """
@@ -124,6 +127,10 @@ def split_array(nums):
     post: return True if nums can be split, False otherwise
     """
     total_sum = sum(nums)
+
+    if total_sum % 2 != 0:
+        return False
+
     target = total_sum // 2
     n = len(nums)
 
@@ -132,8 +139,9 @@ def split_array(nums):
             return True
         if start >= n or current_sum > target:
             return False
-        
-        return can_split(start + 1, current_sum + nums[start]) or can_split(start + 1, current_sum)
+
+        return (can_split(start + 1, current_sum + nums[start]) or
+                can_split(start + 1, current_sum))
 
     return can_split(0, 0)
 
@@ -149,7 +157,7 @@ def split_odd_10(nums):
     def recursive_split(start, odd_sum, ten_sum):
         if start >= len(nums):
             return odd_sum % 2 != 0 and ten_sum % 10 == 0
-        
+
         return (recursive_split(start + 1, odd_sum + nums[start], ten_sum) or
                 recursive_split(start + 1, odd_sum, ten_sum + nums[start]) or
                 recursive_split(start + 1, odd_sum, ten_sum))
@@ -168,13 +176,18 @@ def split_53(nums):
     post: return True if nums can be split, False otherwise
     """
     total = sum(nums)
-    if total % 2 != 0: return False
+
+    if total % 2 != 0 or len(nums) == 0:
+        return False
 
     def can_split(i, sum5, sum3):
-        if i == len(nums): return sum5 == sum3
+        if i == len(nums):
+            return sum5 == sum3
         n = nums[i]
-        if n % 5 == 0: return can_split(i + 1, sum5 + n, sum3)
-        if n % 3 == 0: return can_split(i + 1, sum5, sum3 + n)
+        if n % 5 == 0:
+            return can_split(i + 1, sum5 + n, sum3)
+        if n % 3 == 0:
+            return can_split(i + 1, sum5, sum3 + n)
         return (can_split(i + 1, sum5 + n, sum3) or
                 can_split(i + 1, sum5, sum3 + n))
 

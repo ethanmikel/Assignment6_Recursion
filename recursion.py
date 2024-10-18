@@ -157,10 +157,12 @@ def split_odd_10(nums):
     def recursive_split(start, odd_sum, ten_sum):
         if start >= len(nums):
             return odd_sum % 2 != 0 and ten_sum % 10 == 0
+        
+        include_in_odd = recursive_split(start + 1, odd_sum + nums[start], ten_sum)
+        include_in_ten = recursive_split(start + 1, odd_sum, ten_sum + nums[start])
+        exclude = recursive_split(start + 1, odd_sum, ten_sum)
 
-        return (recursive_split(start + 1, odd_sum + nums[start], ten_sum) or
-                recursive_split(start + 1, odd_sum, ten_sum + nums[start]) or
-                recursive_split(start + 1, odd_sum, ten_sum))
+        return include_in_odd or include_in_ten or exclude
 
     return recursive_split(0, 0, 0)
 

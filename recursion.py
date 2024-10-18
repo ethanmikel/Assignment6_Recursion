@@ -80,13 +80,17 @@ def group_sum_5(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
+    if start >= len(nums):
+        return target == 0
+
     if nums[start] % 5 == 0:
         if start + 1 < len(nums) and nums[start + 1] == 1:
             return group_sum_5(start + 2, nums, target - nums[start])
-        return group_sum_5(start + 1, nums, target - nums[start])
-
-    return (group_sum_5(start + 1, nums, target - nums[start]) or
-            group_sum_5(start + 1, nums, target))
+        else:
+            return group_sum_5(start + 1, nums, target - nums[start])
+    else:
+        return (group_sum_5(start + 1, nums, target - nums[start]) or
+                group_sum_5(start + 1, nums, target))
 
 def group_sum_clump(start, nums, target):
     """
@@ -104,8 +108,7 @@ def group_sum_clump(start, nums, target):
 
     clump_sum = nums[start]
     count = 1
-
-    while start + count < len(nums) and nums[start + count] == clump_sum:
+    while start + count < len(nums) and nums[start + count] == nums[start]:
         clump_sum += nums[start + count]
         count += 1
 
@@ -154,11 +157,10 @@ def split_odd_10(nums):
     def recursive_split(start, odd_sum, ten_sum):
         if start >= len(nums):
             return odd_sum % 2 != 0 and ten_sum % 10 == 0
-        include_as_odd = recursive_split(start + 1, odd_sum + nums[start], ten_sum)
-        include_as_ten = recursive_split(start + 1, odd_sum, ten_sum + nums[start])
-        exclude_current = recursive_split(start + 1, odd_sum, ten_sum)
-        
-        return include_as_odd or include_as_ten or exclude_current
+
+        return (recursive_split(start + 1, odd_sum + nums[start], ten_sum) or
+                recursive_split(start + 1, odd_sum, ten_sum + nums[start]) or
+                recursive_split(start + 1, odd_sum, ten_sum))
 
     return recursive_split(0, 0, 0)
 

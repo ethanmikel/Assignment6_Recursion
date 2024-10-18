@@ -87,7 +87,7 @@ def group_sum_5(start, nums, target):
         if start + 1 < len(nums) and nums[start + 1] == 1:
             return group_sum_5(start + 2, nums, target - nums[start])
         return group_sum_5(start + 1, nums, target - nums[start])
-        
+
     return (group_sum_5(start + 1, nums, target - nums[start]) or
             group_sum_5(start + 1, nums, target))
 
@@ -154,11 +154,11 @@ def split_odd_10(nums):
     post: return True if nums can be split, False otherwise
     """
     def recursive_split(start, odd_sum, ten_sum):
-            if start >= len(nums):
-                return odd_sum % 2 != 0 and ten_sum % 10 == 0
+        if start >= len(nums):
+            return odd_sum % 2 != 0 and ten_sum % 10 == 0
 
-            return (recursive_split(start + 1, odd_sum + nums[start], ten_sum) or
-                    recursive_split(start + 1, odd_sum, ten_sum + nums[start]))
+        return (recursive_split(start + 1, odd_sum + nums[start], ten_sum) or
+                recursive_split(start + 1, odd_sum, ten_sum + nums[start]))
 
     return recursive_split(0, 0, 0)
 
